@@ -17,12 +17,10 @@ triangle=[[75],
 cache = {}
 levels = len(triangle)
 
-def get_path(i,j, path = 0):
-	if i == levels: return path
-	path += triangle[i][j]
+def get_path(i,j):
+	if i == levels-1: return triangle[i][j]
 	if (i,j) in cache: return cache[(i,j)]
-	t = max(get_path(i+1,j, path), get_path(i+1,j+1, path))
-	cache[(i,j)] = t
-	return t
+	cache[(i,j)] = max(triangle[i][j] + get_path(i+1,j), triangle[i][j] + get_path(i+1,j+1))
+	return cache[(i,j)]
 
 print(get_path(0,0))
