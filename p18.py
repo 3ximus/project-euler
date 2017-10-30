@@ -14,14 +14,15 @@ triangle=[[75],
 		  [63, 66,  4, 68, 89, 53, 67, 30, 73, 16, 69, 87, 40, 31],
 		  [ 4, 62, 98, 27, 23,  9, 70, 98, 73, 93, 38, 53, 60,  4, 23]]
 
+cache = {}
 levels = len(triangle)
-m = [max(x) for x in triangle] # list with maximum at each level
 
-def next(i,j):
-	return triangle[i+1][j], triangle[i+1][j+1]
+def get_path(i,j, path = 0):
+	if i == levels: return path
+	path += triangle[i][j]
+	if (i,j) in cache: return cache[(i,j)]
+	t = max(get_path(i+1,j, path), get_path(i+1,j+1, path))
+	cache[(i,j)] = t
+	return t
 
-def max_potencial(i):
-	return sum(m[i:])
-
-
-
+print(get_path(0,0))
