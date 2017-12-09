@@ -11,6 +11,15 @@
 				"kind": "build",
 				"isDefault": true
 			}
+		},
+		{
+			"label": "python -interactive",
+			"command": "ipython -i ${file}",
+			"type": "shell",
+			"group": {
+				"kind": "test",
+				"isDefault": true
+			}
 		}
 	]
 }

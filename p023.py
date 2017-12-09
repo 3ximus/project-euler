@@ -17,11 +17,13 @@ for i in range(2, n + 1):
 	if is_abundant(i):
 		abundants.add(i)
 
-non_abundants = 0
+counter = 0
 for i in range(1, n + 1):
-	if i not in abundants:
-		for j in abundants:
-			if (i - j) not in abundants:
-				non_abundants += i
-				break
-print(non_abundants)
+	is_sum_of_abundants = False
+	for j in abundants:
+		if (i - j) in abundants:
+			is_sum_of_abundants = True # can be written as sum of 2 abundants
+			break
+	if not is_sum_of_abundants:
+		counter += i
+print(counter)
