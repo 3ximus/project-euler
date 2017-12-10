@@ -5,9 +5,9 @@ fd.close()
 
 def name_score(n, i):
 	tc = 0
-	for c in name:
+	for c in n:
 		tc += ord(c) - 64
-	return tc * (index +1)
+	return tc * (i +1)
 
 score = 0
 for index, name in enumerate(names):
