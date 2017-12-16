@@ -1,16 +1,34 @@
-n = 4
-coins = [1, 2, 3, 10, 20, 50, 100, 200]
+target = 200
+coins = [1, 2, 5, 10, 20, 50, 100, 200]
+cache = {}
 
-total_coins = len(coins)
-def coin_value(ci=0, value=0, combinations=0):
-	if value == n:
-		return combinations + 1
-	if ci == total_coins or value > n:
-		return combinations
-	for i in range(n // coins[ci]):
-		combinations = coin_value(ci + 1, value + i * coins[ci], combinations)
-	return combinations
+def sum_coins(index, n):
+	if n == 0:
+		return 1
+	if n < 0:
+		return 0
+	if index <= 0 and n >= 1:
+		return 0
 
-print(coin_value())
+	# NOTE without cache we just needed to run this:
+	# return sum_coins(index - 1, n) + sum_coins(index, n - coins[index - 1])
+	# the rest of the code makes use of the cache
+
+	val = (index - 1, n)
+	if not val in cache:
+		a = sum_coins(index - 1, n)
+		cache[val] = a
+	else:
+		a = cache[val]
+
+	val = (index, n - coins[index - 1])
+	if not val in cache:
+		b = sum_coins(index, n - coins[index - 1])
+		cache[val] = b
+	else:
+		b = cache[val]
+	return a + b
+
+print(sum_coins(len(coins), target))
 
 
