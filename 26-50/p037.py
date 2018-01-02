@@ -11,6 +11,7 @@ def get_truncation(n):
 	ns = str(n)
 	for i in range(1, len(ns)):  # left to right
 		yield int(ns[:i])
+		yield int(ns[i:])
 
 # NOTE this is not really god enough, lets try and generate new
 def product_permutations(*args, repeat=1):
