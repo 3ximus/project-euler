@@ -9,10 +9,6 @@ screen.keypad(1) # Capture input from keypad
 # Change this to use different colors when highlighting
 curses.init_pair(1,curses.COLOR_BLACK, curses.COLOR_WHITE) # Sets up color pair #1, it does black text with white background
 
-MENU = "menu"
-COMMAND = "command"
-EXITMENU = "exitmenu"
-
 def run_menu(parent='.'):
 	pos=0 #pos is the zero-based index of the hightlighted menu option. Every time runmenu is called, position returns to 0, when runmenu ends the position is returned and tells the program what opt$
 	x = None #control for while loop, let's you scroll through options until return key is pressed then returns pos to program
