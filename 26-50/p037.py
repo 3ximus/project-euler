@@ -1,21 +1,40 @@
-primes = set()
+p_left = set() # still prime taking digits left
+p_right = set() # still prime taking digits right
 
 def is_prime(n):
-	if n in primes: return True # speedup
 	for i in range(2, int(n**0.5 + 1)):
 		if n % i == 0: return False
-	primes.add(n)
 	return True
+
+def verify_left(n):
+	if len(n) == 1:
+		return True
+	if int(n) not in p_left or not is_prime(int(n)):
+		return False
+	if verify_left(n[1:]):
+		p_left.add(int(n))
+		return True
+	return False
+
+def verify_right(n):
+	if len(n) == 1:
+		return True
+	if int(n) not in p_right or not is_prime(int(n)):
+		return False
+	if verify_right(n[:-1]):
+		p_right.add(int(n))
+		return True
+	return False
 
 def verify(n):
 	if not is_prime(n): return False
+	print(n)
 	ns = str(n)
-	# only check usefull permutations, ignore single digits
-	for i in range(1, len(ns) - 1):
-		if not is_prime(int(ns[i:])): return False
-	for i in range(2, len(ns)):
-		if not is_prime(int(ns[:i])): return False
-	return True
+	if len(ns) == 2:
+		p_left.add(n)
+		p_right.add(n)
+		return True
+	return verify_left(ns[1:]) and verify_right(ns[:-1])
 
 def product_permutations(*args, repeat=1):
 	# product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
@@ -40,13 +59,14 @@ def generate_valid_numbers():
 					yield int(i+x+j)
 		size += 1
 
-count = 0
-sumation = 0
-for i in generate_valid_numbers():
-	if verify(i):
-		count += 1
-		print(count, i)
-		sumation += i
-	if count == 11:
-		break
-print(sumation)
+# count = 0
+# sumation = 0
+# for i in generate_valid_numbers():
+# 	if verify(i):
+# 		count += 1
+# 		print(p_left, p_right)
+# 		print(count, i)
+# 		sumation += i
+# 	if count == 11:
+# 		break
+# print(sumation)
