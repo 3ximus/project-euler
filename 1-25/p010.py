@@ -1,12 +1,8 @@
-def is_prime(n):
-	for i in range(2,int(n**0.5+1)):
-		if n % i == 0:
-			return False
-	return True
+from lib.eratosthenes import ESieve
 
-s = 5 # skip 2 and 3 in order to skip all even numbers on iteration
+s = 0
 target = 2000000
-for i in range(5, target, 2):
-	if is_prime(i):
-		s += i
+sieve = ESieve().initialize(target)
+for i,is_prime in enumerate(sieve.primes):
+	if is_prime: s += i
 print(s)
