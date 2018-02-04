@@ -1,33 +1,24 @@
-p_left = set() # still prime taking digits left
-p_right = set() # still prime taking digits right
-
-no_left = set()
-no_right = set()
+from lib.eratosthenes import ESieve
+primes = set(ESieve(2000000).sieve())
 
 def is_prime(n):
-	for i in range(2, int(n**0.5 + 1)):
-		if n % i == 0: return False
-	return True
+	return n in primes
 
 def verify_left(n):
 	if len(n) == 1:
 		return True
-	if int(n) in no_left or (int(n) not in p_left and not is_prime(int(n))):
-		no_left.add(int(n))
+	if not is_prime(int(n)):
 		return False
 	if verify_left(n[1:]):
-		p_left.add(int(n))
 		return True
 	return False
 
 def verify_right(n):
 	if len(n) == 1:
 		return True
-	if int(n) in no_right or (int(n) not in p_right and not is_prime(int(n))):
-		no_right.add(int(n))
+	if is_prime(int(n)):
 		return False
 	if verify_right(n[:-1]):
-		p_right.add(int(n))
 		return True
 	return False
 
@@ -35,16 +26,8 @@ def verify(n):
 	if not is_prime(n): return False
 	ns = str(n)
 	if len(ns) == 2:
-		p_left.add(n)
-		p_right.add(n)
 		return True
-	x = verify_left(ns[1:])
-	y = verify_right(ns[:-1])
-	if y: p_right.add(n)
-	else: no_right.add(n)
-	if x: p_left.add(n)
-	else: no_left.add(n)
-	return x and y
+	return verify_left(ns[1:]) and verify_right(ns[:-1])
 
 def product_permutations(*args, repeat=1):
 	# product('ABCD', 'xy') --> Ax Ay Bx By Cx Cy Dx Dy
@@ -72,9 +55,6 @@ def generate_valid_numbers():
 count = 0
 sumation = 0
 for i in generate_valid_numbers():
-	if i > 100000000:
-		print(i)
-		break
 	if verify(i):
 		count += 1
 		print(count, i)
@@ -82,4 +62,3 @@ for i in generate_valid_numbers():
 	if count == 11:
 		break
 print(sumation)
-
