@@ -14,7 +14,7 @@
 		},
 		{
 			"label": "python -interactive",
-			"command": "ipython -i ${file}",
+			"command": "ipython3 -i ${file}",
 			"type": "shell",
 			"group": {
 				"kind": "test",
