@@ -15,7 +15,7 @@ class ESieve:
 
 	def sieve(self):
 		'''Fastest sieve form'''
-		return self.sieve_numpy_2()
+		return self.sieve_numpy_3()
 
 	def sieve_simple(self):
 		'''Slowest and simplest form of the sieving algorithm'''
@@ -40,7 +40,7 @@ class ESieve:
 		_ptable = numpy.ones(self.max_number, dtype=bool)
 		_ptable[:2] = False
 		_ptable[4::2] = False
-		for i in range(3, int(self.max_number ** .5 )+1, 2):
+		for i in range(3, int(self.max_number ** .5) + 1, 2):
 			if _ptable[i]:
 				_ptable[i*i::2*i] = False
 		return _ptable.nonzero()[0] # grab nonzero indexes
@@ -48,30 +48,31 @@ class ESieve:
 	def sieve_numpy_2(self):
 		'''Faster form using numpy arrays with half the space'''
 		_ptable = numpy.ones(self.max_number // 2, dtype=bool)
-		for i in range(3, int(self.max_number ** .5 )+1, 2):
+		for i in range(3, int(self.max_number ** .5 ) + 1, 2):
 			if _ptable[i // 2]:
 				_ptable[i*i//2::i] = False
 		result = 2 * _ptable.nonzero()[0] + 1
 		result[0] = 2
 		return result
 
-def sieve8(n):
-	"""Return an array of the primes below n."""
-	prime = numpy.ones(n//3 + (n % 6 == 2), dtype=numpy.bool)
-	for i in range(3, int(n**.5) + 1, 3):
-		if prime[i // 3]:
-			p = (i + 1) | 1
-			prime[p*p//3::2*p] = False
-			prime[p*(p-2*(i & 1)+4)//3::2*p] = False
-	result = (3 * prime.nonzero()[0] + 1) | 1
-	result[0] = 3
-	return numpy.r_[2,result]
+	def sieve_numpy_3(self):
+		'''Fastest form using numpy arrays with a third of the space'''
+		# use (self.max_number % 6 == 2) to fix size
+		_ptable = numpy.ones(self.max_number//3 + (self.max_number % 6 == 2), dtype=numpy.bool)
+		for i in range(3, int(self.max_number ** .5 ) + 1, 3):
+			if _ptable[i // 3]:
+				p = (i + 1) | 1
+				_ptable[p*p//3::2*p] = False
+				_ptable[p*(p-2*(i & 1)+4)//3::2*p] = False
+		result = (3 * _ptable.nonzero()[0] + 1) | 1
+		result[0] = 3
+		return numpy.r_[2,result]
 
 
 if __name__ == '__main__':
 	# project euler 10 example
 	from time import time
-	target = 20000000
+	target = 2000000
 
 	ts = time()
 	print("Simple ", sum(ESieve(target).sieve_simple()))
@@ -87,4 +88,8 @@ if __name__ == '__main__':
 
 	ts = time()
 	print("Numpy2 ", sum(ESieve(target).sieve_numpy_2()))
+	print("  ", time() - ts)
+
+	ts = time()
+	print("Numpy3 ", sum(ESieve(target).sieve_numpy_3()))
 	print("  ", time() - ts)
