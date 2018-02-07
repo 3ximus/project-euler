@@ -1,8 +1,7 @@
 bound = 1000
-def is_prime(n):
-	for i in range(2,int(n**0.5+1)):
-		if n % i == 0: return False
-	return True
+from lib.eratosthenes import sieve
+primes = set(sieve(100000))
+is_prime = lambda x: x in primes
 
 def quadratic(n, a, b):
 	return n * n + a * n + b
@@ -20,7 +19,7 @@ max_primes_mul = 0
 for i in primes:
 	for j in primes:
 		counter = max(test_quadratic(i, j), test_quadratic(-i, -j),
-		              test_quadratic(-i, j), test_quadratic(i, -j))
+					  test_quadratic(-i, j), test_quadratic(i, -j))
 		if counter > max_primes:
 			max_primes = counter
 			max_primes_mul = i*j
