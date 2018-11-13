@@ -1,5 +1,5 @@
-from lib.eratosthenes import ESieve
-primes = set(ESieve(2000000).sieve())
+from lib.eratosthenes import sieve
+primes = set(sieve(20000000))
 
 def is_prime(n):
 	return n in primes

@@ -1,4 +1,3 @@
-from lib.eratosthenes import ESieve
-
+from lib.eratosthenes import sieve
 target = 2000000
-print(sum(ESieve(target).sieve()))
+print(sum(sieve(target)))
