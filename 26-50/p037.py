@@ -1,32 +1,22 @@
 from lib.eratosthenes import sieve
-primes = set(sieve(20000000))
+primes = set(sieve(1000000))
 
 def is_prime(n):
 	return n in primes
 
 def verify_left(n):
-	if len(n) == 1:
-		return True
-	if not is_prime(int(n)):
-		return False
-	if verify_left(n[1:]):
-		return True
-	return False
+	if len(n) == 1: return is_prime(int(n))
+	return is_prime(int(n)) and verify_left(n[1:])
 
 def verify_right(n):
-	if len(n) == 1:
-		return True
-	if is_prime(int(n)):
-		return False
-	if verify_right(n[:-1]):
-		return True
-	return False
+	if len(n) == 1: return is_prime(int(n))
+	return is_prime(int(n)) and verify_right(n[:-1])
 
 def verify(n):
 	if not is_prime(n): return False
 	ns = str(n)
 	if len(ns) == 2:
-		return True
+		return is_prime(int(ns[0])) and is_prime(int(ns[1]))
 	return verify_left(ns[1:]) and verify_right(ns[:-1])
 
 def product_permutations(*args, repeat=1):
@@ -40,7 +30,7 @@ def product_permutations(*args, repeat=1):
 		yield ''.join(prod)
 
 def generate_valid_numbers():
-	allowed = ['2357', '379', '37'] # first, middle and last digits of ever allowed number
+	allowed = ['2357', '1379', '37'] # first, middle and last digits of ever allowed number
 	for i in allowed[0]:
 		for j in allowed[-1]:
 			yield int(i+j)
@@ -52,13 +42,9 @@ def generate_valid_numbers():
 					yield int(i+x+j)
 		size += 1
 
-count = 0
-sumation = 0
+done = []
 for i in generate_valid_numbers():
 	if verify(i):
-		count += 1
-		print(count, i)
-		sumation += i
-	if count == 11:
-		break
-print(sumation)
+		done.append(i)
+	if len(done) == 11: break
+print(sum(done))
