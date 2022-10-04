@@ -52,7 +52,7 @@ def sieve_numpy_2(max_number):
 def sieve_numpy_3(max_number):
 	'''Fastest form using numpy arrays with a third of the space'''
 	# use (max_number % 6 == 2) to fix size
-	_ptable = numpy.ones(max_number//3 + (max_number % 6 == 2), dtype=numpy.bool)
+	_ptable = numpy.ones(max_number//3 + (max_number % 6 == 2), dtype=bool)
 	for i in range(3, int(max_number ** .5 ) + 1, 3):
 		if _ptable[i // 3]:
 			p = (i + 1) | 1
@@ -66,7 +66,7 @@ def sieve_numpy_3(max_number):
 if __name__ == '__main__':
 	# project euler 10 example
 	from time import time
-	target = 2000000
+	target = 20000000
 
 	ts = time()
 	print("Simple ", sum(sieve_simple(target)))
