@@ -6,6 +6,10 @@ import (
 	"time"
 )
 
+func Sieve(n int) []int {
+	return thirds(n);
+}
+
 func sum(array []int) int {
 	result := 0
 	for _, v := range array {
@@ -14,7 +18,7 @@ func sum(array []int) int {
 	return result
 }
 
-func SieveBasic(n int) []int {
+func basic(n int) []int {
 	// n+1 allows us to start the loop at 2
 	// without a subtracting 2 from each iteration
 	// (this just ignores indexes 0, 1)
@@ -37,7 +41,7 @@ func SieveBasic(n int) []int {
 	return primes[:pi]
 }
 
-func Sieve2(n int) []int {
+func halved(n int) []int {
 	marks := make([]bool, n/2+1)
 	primes := make([]int, n/2+1)
 	pi := 0
@@ -64,9 +68,52 @@ func Sieve2(n int) []int {
 	return primes[:pi]
 }
 
+// This function has a bug where if n is right before a prime on some occasions it will still print that prime
+func thirds(n int) []int {
+	size := int(math.Ceil(float64(n)/3));
+	if n % 6 == 2 {
+		size += 1;
+	}
+	marks := make([]bool, size);
+	primes := make([]int, size+1)
+	pi := 1
+
+	if n <=1 {
+		return make([]int, 0);
+	} else if n == 2 {
+		return []int{2};
+	}
+
+	for i := 3; i <= int(math.Sqrt(float64(n))); i+=3 {
+		if !marks[i/3] {
+			x := (i + 1) | 1;
+			for m := x*x/3; m <= n/3; m += 2*x {
+				marks[m] = true
+			}
+			for m := x*(x-2*(i & 1) +4)/3; m <= n/3; m += 2*x {
+				marks[m] = true
+			}
+		}
+	}
+
+	for i := 0; (3 * i + 1) | 1 <= n ; i++ {
+		if !marks[i] {
+			primes[pi] = (3 * i + 1) | 1;
+			pi++;
+		}
+	}
+
+	primes[1] = 3;
+	primes[0] = 2
+	return primes[:pi];
+}
+
 func main() {
+	target := 20000000;
 	start := time.Now();
-	fmt.Printf("Sieve Basic %v\n %v\n", sum(SieveBasic(20000000)), time.Since(start));
+	fmt.Printf("Sieve Basic %v\n %v\n", sum(basic(target)), time.Since(start));
 	start = time.Now();
-	fmt.Printf("Sieve Half Squared %v\n %v\n", sum(Sieve2(20000000)), time.Since(start));
+	fmt.Printf("Sieve Half  %v\n %v\n", sum(halved(target)), time.Since(start));
+	start = time.Now();
+	fmt.Printf("Sieve Third %v\n %v\n", sum(thirds(target)), time.Since(start));
 }
