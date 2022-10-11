@@ -1,24 +1,21 @@
-package main
+// vim: foldmethod=marker
+package lib
 
-import (
-	"fmt"
-	"math"
-	"time"
-)
+import "math"
 
-func Sieve(n int) []int {
+func EratosthenesSieve(n int) []int {
 	return thirds(n);
 }
 
-func sum(array []int) int {
+func sum(array []int) int { // {{{
 	result := 0
 	for _, v := range array {
 		result += v
 	}
 	return result
-}
+} // }}}
 
-func basic(n int) []int {
+func basic(n int) []int { // {{{
 	// n+1 allows us to start the loop at 2
 	// without a subtracting 2 from each iteration
 	// (this just ignores indexes 0, 1)
@@ -39,9 +36,9 @@ func basic(n int) []int {
 		}
 	}
 	return primes[:pi]
-}
+} // }}}
 
-func halved(n int) []int {
+func halved(n int) []int { // {{{
 	marks := make([]bool, n/2+1)
 	primes := make([]int, n/2+1)
 	pi := 0
@@ -66,10 +63,9 @@ func halved(n int) []int {
 	}
 	primes[0] = 2;
 	return primes[:pi]
-}
+} // }}}
 
-// This function has a bug where if n is right before a prime on some occasions it will still print that prime
-func thirds(n int) []int {
+func thirds(n int) []int { // {{{
 	size := int(math.Ceil(float64(n)/3));
 	if n % 6 == 2 {
 		size += 1;
@@ -106,14 +102,14 @@ func thirds(n int) []int {
 	primes[1] = 3;
 	primes[0] = 2
 	return primes[:pi];
-}
+} // }}}
 
-func main() {
-	target := 20000000;
-	start := time.Now();
-	fmt.Printf("Sieve Basic %v\n %v\n", sum(basic(target)), time.Since(start));
-	start = time.Now();
-	fmt.Printf("Sieve Half  %v\n %v\n", sum(halved(target)), time.Since(start));
-	start = time.Now();
-	fmt.Printf("Sieve Third %v\n %v\n", sum(thirds(target)), time.Since(start));
-}
+// func main() {
+// 	target := 20000000;
+// 	start := time.Now();
+// 	fmt.Printf("Sieve Basic %v\n %v\n", sum(basic(target)), time.Since(start));
+// 	start = time.Now();
+// 	fmt.Printf("Sieve Half  %v\n %v\n", sum(halved(target)), time.Since(start));
+// 	start = time.Now();
+// 	fmt.Printf("Sieve Third %v\n %v\n", sum(thirds(target)), time.Since(start));
+// }
